@@ -1,0 +1,26 @@
+{
+  "buildCommand": "next build",
+  "devCommand": "next dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  },
+  "env": [
+    {
+      "key": "MONGODB_URI",
+      "description": "MongoDB connection string"
+    },
+    {
+      "key": "NEXTAUTH_SECRET",
+      "description": "NextAuth secret for session encryption (min 32 chars)"
+    },
+    {
+      "key": "NEXTAUTH_URL",
+      "description": "NextAuth URL (use your Vercel deployment URL)"
+    }
+  ]
+}

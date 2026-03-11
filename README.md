@@ -1,6 +1,6 @@
-# Portfolio & Blog - Full Stack Application
+# Portfolio Blog - MERN Stack Application
 
-A modern, full-stack portfolio and blog application built with Next.js 16, MongoDB, and NextAuth.js.
+A full-featured portfolio and blog application built with the MERN stack (MongoDB, Express.js, React, Node.js) with separate frontend and backend repositories.
 
 ## Features
 
@@ -15,196 +15,283 @@ A modern, full-stack portfolio and blog application built with Next.js 16, Mongo
 
 ## Tech Stack
 
-- **Frontend**: Next.js 16 with React 19.2
-- **Backend**: Next.js API Routes
-- **Database**: MongoDB with Mongoose ODM
-- **Authentication**: NextAuth.js v5
-- **Styling**: Tailwind CSS 3
-- **Validation**: Zod for schema validation
-- **Type Safety**: TypeScript
+### Backend
+- **Node.js** - JavaScript runtime
+- **Express.js** - Web framework
+- **MongoDB** - NoSQL database
+- **Mongoose** - ODM for MongoDB
+- **JWT** - Token-based authentication
+- **bcryptjs** - Password hashing
+- **CORS** - Cross-origin support
+
+### Frontend
+- **React 18** - UI library
+- **Vite** - Build tool & dev server
+- **React Router v6** - Client-side routing
+- **Axios** - HTTP client
+- **Tailwind CSS** - Utility-first CSS
+- **Lucide React** - Icon library
+- **date-fns** - Date formatting
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ (recommended 20+)
-- npm, yarn, or pnpm
-- MongoDB Atlas account (free tier available)
+- Node.js 18.x or higher
+- npm or yarn
+- MongoDB Atlas account (free M0 cluster)
+- Two separate GitHub repositories (backend & frontend)
 
-### Installation
+### Local Development Setup
 
-1. Clone the repository:
+#### 1. Backend Setup
+
 ```bash
-git clone <repository-url>
-cd portfolio-blog
-```
-
-2. Install dependencies:
-```bash
+cd backend
 npm install
+cp .env.example .env
 ```
 
-3. Set up environment variables:
-```bash
-cp .env.example .env.local
-```
-
-4. Configure your MongoDB URI and NextAuth secret in `.env.local`:
+Edit `.env`:
 ```env
-MONGODB_URI=your_mongodb_connection_string
-NEXTAUTH_SECRET=generate_a_random_32_char_secret
-NEXTAUTH_URL=http://localhost:3000
+PORT=5000
+MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/portfolio_blog?retryWrites=true&w=majority
+JWT_SECRET=your_secret_key_here_min_32_characters
+FRONTEND_URL=http://localhost:5173
+NODE_ENV=development
 ```
 
-### Running Development Server
-
+Start backend server:
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+Backend runs on: `http://localhost:5000`
 
-## File Structure
+#### 2. Frontend Setup (in new terminal)
+
+```bash
+cd frontend
+npm install
+cp .env.example .env.local
+```
+
+Edit `.env.local`:
+```env
+VITE_API_URL=http://localhost:5000
+VITE_SITE_NAME=My Portfolio
+```
+
+Start frontend dev server:
+```bash
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+## Project Structure
 
 ```
 portfolio-blog/
-├── app/
-│   ├── api/                    # API routes
-│   │   ├── auth/              # Authentication routes
-│   │   ├── posts/             # Blog post routes
-│   │   ├── comments/          # Comment routes
-│   │   ├── projects/          # Project routes
-│   │   ├── newsletter/        # Newsletter routes
-│   │   └── contact/           # Contact form route
-│   ├── blog/                  # Blog pages
-│   ├── projects/              # Project pages
-│   ├── auth/                  # Authentication pages
-│   ├── layout.tsx             # Root layout
-│   └── page.tsx               # Home page
-├── models/                    # MongoDB schemas
-│   ├── User.ts
-│   ├── BlogPost.ts
-│   ├── Comment.ts
-│   ├── Project.ts
-│   └── NewsletterSubscriber.ts
-├── lib/
-│   ├── mongodb.ts             # MongoDB connection
-│   └── auth.ts                # NextAuth configuration
-├── components/                # React components
-├── public/                    # Static assets
-├── tailwind.config.ts         # Tailwind configuration
-├── tsconfig.json              # TypeScript configuration
-└── package.json               # Dependencies
+├── backend/
+│   ├── config/
+│   │   ├── db.js              # MongoDB connection
+│   │   └── jwt.js             # JWT utilities
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── BlogPost.js
+│   │   ├── Comment.js
+│   │   ├── Project.js
+│   │   └── NewsletterSubscriber.js
+│   ├── routes/
+│   │   ├── auth.js            # Auth endpoints
+│   │   ├── posts.js           # Blog post endpoints
+│   │   ├── comments.js        # Comment endpoints
+│   │   ├── projects.js        # Project endpoints
+│   │   ├── newsletter.js      # Newsletter endpoints
+│   │   └── contact.js         # Contact endpoints
+│   ├── middleware/
+│   │   └── auth.js            # JWT authentication
+│   ├── server.js              # Express server
+│   ├── package.json
+│   ├── render.yaml            # Render deployment config
+│   └── .env.example
+│
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── Home.jsx
+│   │   │   ├── Blog.jsx
+│   │   │   ├── BlogDetail.jsx
+│   │   │   ├── Projects.jsx
+│   │   │   ├── ProjectDetail.jsx
+│   │   │   ├── Login.jsx
+│   │   │   └── Signup.jsx
+│   │   ├── components/
+│   │   │   ├── Navigation.jsx
+│   │   │   └── Footer.jsx
+│   │   ├── services/
+│   │   │   └── api.js         # Axios API client
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   └── index.css
+│   ├── public/
+│   ├── index.html
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── tailwind.config.js
+│   ├── vercel.json
+│   └── .env.example
+│
+└── Documentation
+    ├── README.md              # This file
+    ├── MERN_DEPLOYMENT_GUIDE.md
+    └── MERN_QUICK_START.md
 ```
 
 ## API Endpoints
 
+Base URL: `http://localhost:5000/api` (development)
+
 ### Authentication
-- `POST /api/auth/signup` - Register new user
-- `POST /api/auth/[...nextauth]` - NextAuth endpoints
+- `POST /auth/signup` - Register new user
+- `POST /auth/login` - Login user
+- `GET /auth/me` - Get current user (protected)
 
 ### Blog Posts
-- `GET /api/posts` - Get all published posts (paginated)
-- `POST /api/posts` - Create new post (protected)
-- `GET /api/posts/[id]` - Get single post
-- `PUT /api/posts/[id]` - Update post (protected)
-- `DELETE /api/posts/[id]` - Delete post (protected)
-- `GET /api/posts/search` - Search posts with filters
+- `GET /posts` - Get all posts with pagination/search
+- `GET /posts/:slug` - Get single post by slug
+- `POST /posts` - Create post (protected)
+- `PUT /posts/:id` - Update post (protected)
+- `DELETE /posts/:id` - Delete post (protected)
 
 ### Comments
-- `GET /api/comments` - Get comments for a post
-- `POST /api/comments` - Create comment
-- `DELETE /api/comments/[id]` - Delete comment (protected)
+- `GET /comments/post/:postId` - Get post comments
+- `POST /comments` - Create comment (protected)
+- `PUT /comments/:id` - Update comment (protected)
+- `DELETE /comments/:id` - Delete comment (protected)
 
 ### Projects
-- `GET /api/projects` - Get all projects
-- `POST /api/projects` - Create project (protected)
-- `GET /api/projects/[id]` - Get single project
-- `PUT /api/projects/[id]` - Update project (protected)
-- `DELETE /api/projects/[id]` - Delete project (protected)
+- `GET /projects` - Get all projects
+- `GET /projects/:slug` - Get single project by slug
+- `POST /projects` - Create project (protected)
+- `PUT /projects/:id` - Update project (protected)
+- `DELETE /projects/:id` - Delete project (protected)
 
-### Newsletter & Contact
-- `POST /api/newsletter/subscribe` - Subscribe to newsletter
-- `POST /api/contact` - Submit contact form
+### Newsletter
+- `POST /newsletter/subscribe` - Subscribe to newsletter
+- `POST /newsletter/unsubscribe` - Unsubscribe
 
-## Database Setup
+### Contact
+- `POST /contact` - Submit contact form
+- `GET /health` - Health check
 
-The application requires a MongoDB database. Here's how to set it up:
+## MongoDB Setup
 
-1. Create an account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Create a new cluster
-3. Get your connection string from the Atlas dashboard
-4. Add it to `.env.local` as `MONGODB_URI`
+1. Create account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Create M0 free cluster
+3. Create database user with strong password
+4. Whitelist IP address (0.0.0.0/0 for development)
+5. Get connection string
+6. Replace `<username>` and `<password>` in URI
 
-The application will automatically create collections when models are first used.
+Example: 
+```
+mongodb+srv://portfolio_user:yourpassword@cluster.mongodb.net/portfolio_blog?retryWrites=true&w=majority
+```
 
 ## Environment Variables
 
-Required environment variables:
-
+### Backend (.env)
 ```env
-# Database
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/dbname
-
-# Authentication
-NEXTAUTH_SECRET=your-secret-key-min-32-characters
-NEXTAUTH_URL=http://localhost:3000
-
-# Site Configuration
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_SITE_NAME=Portfolio & Blog
+PORT=5000
+MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/portfolio_blog?retryWrites=true&w=majority
+JWT_SECRET=generate_with_openssl_rand_-base64_32
+FRONTEND_URL=http://localhost:5173
+NODE_ENV=development
 ```
 
-Optional environment variables for email features:
-
+### Frontend (.env.local)
 ```env
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-SMTP_FROM=noreply@yourdomain.com
+VITE_API_URL=http://localhost:5000
+VITE_SITE_NAME=My Portfolio
+```
+
+### Production Environment Variables
+
+**Backend (Render)**
+```env
+MONGODB_URI=<your_mongodb_uri>
+JWT_SECRET=<generate_secure_secret>
+FRONTEND_URL=https://your-frontend.vercel.app
+NODE_ENV=production
+```
+
+**Frontend (Vercel)**
+```env
+VITE_API_URL=https://your-backend.onrender.com
+VITE_SITE_NAME=My Portfolio
 ```
 
 ## Deployment
 
-### Deploying to Vercel
+### Backend Deployment (Render.com)
 
-1. Push your code to GitHub
-2. Visit [Vercel](https://vercel.com) and connect your repository
-3. Set the following environment variables in Vercel project settings:
-   - `MONGODB_URI`
-   - `NEXTAUTH_SECRET` (generate a new one with `openssl rand -base64 32`)
-   - `NEXTAUTH_URL` (your production URL)
+1. Push backend to GitHub
+2. Go to [render.com](https://render.com)
+3. Create new Web Service
+4. Connect GitHub repository
+5. Configure:
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+   - Region: Choose closest to you
+6. Add environment variables
+7. Deploy (3-5 minutes)
 
-4. Deploy!
+**Resulting URL**: `https://portfolio-blog-api.onrender.com`
 
-### Deploying to Other Platforms
+### Frontend Deployment (Vercel)
 
-The application can be deployed to any platform that supports Node.js 18+:
+1. Push frontend to GitHub
+2. Go to [vercel.com](https://vercel.com)
+3. Import GitHub repository
+4. Configure:
+   - Framework: Vite
+   - Root Directory: `./`
+5. Add environment variables
+6. Deploy (2-3 minutes)
 
-- AWS EC2, Lambda, Amplify
-- Google Cloud Platform
-- Azure
-- DigitalOcean
-- Heroku
-- Self-hosted VPS
+**Resulting URL**: `https://portfolio-blog.vercel.app`
+
+### See Full Deployment Guide
+
+Read `MERN_DEPLOYMENT_GUIDE.md` for:
+- Step-by-step MongoDB Atlas setup
+- JWT secret generation
+- Detailed Render deployment
+- Detailed Vercel deployment
+- Environment variables configuration
+- Troubleshooting tips
 
 ## Security Features
 
 - Password hashing with bcryptjs
-- Secure session management with NextAuth.js
-- CSRF protection
-- Security headers (X-Content-Type-Options, X-Frame-Options, etc.)
-- Input validation with Zod
+- JWT token-based authentication
+- Protected API routes with middleware
+- CORS configuration
+- Environment variable protection
+- Input validation on backend
 - MongoDB connection pooling
+- Secure password reset flow
 
-## Performance Optimizations
+## Performance Features
 
-- Image optimization
-- Code splitting
-- API route caching
-- Database query optimization with indexes
-- Middleware for request processing
+- Pagination on blog posts and projects
+- Text search indexes on MongoDB
+- Efficient API client with Axios
+- Lazy loaded components
+- Optimized Vite bundle
+- Database query optimization
 
 ## Contributing
 
@@ -215,20 +302,29 @@ The application can be deployed to any platform that supports Node.js 18+:
 
 ## Troubleshooting
 
+### Backend won't start
+- Check Node.js version: `node --version` (should be 18+)
+- Verify MongoDB URI is correct
+- Check `.env` file exists and has all required variables
+- Try: `rm -rf node_modules && npm install`
+
+### Frontend can't connect to API
+- Verify `VITE_API_URL` in `.env.local` matches backend URL
+- Check backend is running on correct port
+- Ensure CORS is enabled in Express server
+- Try clearing browser cache
+
 ### MongoDB Connection Issues
-- Verify your connection string is correct
-- Check that your IP is whitelisted in MongoDB Atlas
-- Ensure the database name is correct in the URI
+- Verify connection string from MongoDB Atlas
+- Check IP whitelist (use 0.0.0.0/0 for development)
+- Ensure database user has correct permissions
+- Test with MongoDB Compass
 
-### NextAuth Issues
-- Generate a new `NEXTAUTH_SECRET` with `openssl rand -base64 32`
-- Verify `NEXTAUTH_URL` matches your deployment URL
-- Check that the OAuth provider credentials are correct
-
-### Build Errors
-- Clear `.next` folder: `rm -rf .next`
-- Clear node_modules: `rm -rf node_modules && npm install`
-- Check Node.js version is 18+
+### Deployment Issues
+- Check environment variables on Render/Vercel
+- Verify backend and frontend URLs match
+- Review logs in Render/Vercel dashboards
+- See `MERN_DEPLOYMENT_GUIDE.md` for solutions
 
 ## License
 
@@ -243,17 +339,29 @@ For issues and questions:
 
 ## Roadmap
 
-- [ ] Dark mode toggle
-- [ ] Search analytics
-- [ ] Email notifications
-- [ ] Social sharing
-- [ ] Related posts
-- [ ] Author profiles
-- [ ] Tags management
-- [ ] Categories management
 - [ ] Admin dashboard
-- [ ] Backup and restore
+- [ ] Email notifications (SendGrid/Resend)
+- [ ] Social authentication (Google, GitHub)
+- [ ] Dark mode
+- [ ] Advanced search
+- [ ] Analytics
+- [ ] Image upload support
+- [ ] Rich text editor
+- [ ] Comment moderation
+- [ ] User profiles
 
-## Changelog
+## Resources
 
-See [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
+- **Deployment Guides**: See `MERN_DEPLOYMENT_GUIDE.md` and `MERN_QUICK_START.md`
+- **Express.js Docs**: https://expressjs.com/
+- **React Router**: https://reactrouter.com/
+- **MongoDB**: https://docs.mongodb.com/
+- **Vite**: https://vitejs.dev/
+- **Tailwind CSS**: https://tailwindcss.com/
+
+## Quick Links
+
+- [Frontend Deployment (Vercel)](#frontend-deployment-vercel)
+- [Backend Deployment (Render)](#backend-deployment-rendercom)
+- [API Endpoints](#api-endpoints)
+- [Environment Setup](#environment-variables)
